@@ -11,7 +11,7 @@ redoc_url = "/redoc" if config["app"]["env"] == "development" else None
 app = FastAPI(
     title="FAST API",
     version="1.0.0",
-    description="API BOILERPLATE BY RUPERT CAINGAL",
+    description="FAST API BY DANIELLE LUNAS",
     docs_url=docs_url,
     redoc_url=redoc_url,
 )
@@ -34,7 +34,7 @@ app.include_router(api_router)
 async def root():
     return AppResponse.send_success(
         data=None, 
-        message="Welcome to the FAST API Boilerplate by Rupert Caingal!",
+        message="Welcome to the FAST API by DANIELLE LUNAS!",
         code=200
         )
    
