@@ -1,16 +1,19 @@
-# models.py
-import uuid
-from sqlalchemy import UUID, Column, Integer, String, DateTime
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.sql import func
+from pydantic import BaseModel
+from typing import List, Optional
+from uuid import UUID, uuid4
+from api.models.role_model import Role
+from api.models.gender_model import Gender
 
-from . import Base
-
-class User(Base):
-    __tablename__ = 'users'
-
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    name = Column(String, index=True)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
-    deleted_at = Column(DateTime(timezone=True), nullable=True)
+class User(BaseModel):
+    id: Optional[UUID] = uuid4()
+    first_name: str
+    last_name: str
+    middle_name: Optional[str] = None
+    gender: Gender
+    roles: List[Role] = []  
+    
+class UserUpdateRequest(BaseModel):
+    first_name: Optional[str]
+    last_name: Optional[str]
+    middle_name: Optional[str]
+    roles: Optional[List[Role]]
