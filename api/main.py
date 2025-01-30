@@ -1,8 +1,16 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from api.config.config import config
 from fastapi.middleware.cors import CORSMiddleware
 from api.utils.app_response import AppResponse
 from api.routes import router as api_router
+from typing import List
+from uuid import uuid4, UUID
+from api.models.user_model import User
+from api.models.role_model import Role
+from api.models.gender_model import Gender
+from api.models.user_model import UserUpdateRequest 
+from api.routes.v1.admin_router import admin_router 
+
 # Determine Swagger visibility based on environment
 docs_url = "/docs" if config["app"]["env"] == "development" else None
 redoc_url = "/redoc" if config["app"]["env"] == "development" else None
@@ -25,6 +33,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Register the admin router
+app.include_router(admin_router, prefix="/api/v1", tags=["admin"])
 
 # Registere Endpoints
 app.include_router(api_router)
@@ -37,10 +47,9 @@ async def root():
         message="Welcome to the FAST API by DANIELLE LUNAS!",
         code=200
         )
-   
 
 # Run the server
-if __name__ == "__main__":
+if __name__ == "__main__": 
     import uvicorn
 
     # Use config["app"]["port"] dynamically
