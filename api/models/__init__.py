@@ -9,3 +9,4 @@ Base = declarative_base()
 
 from api.models.test_model import Test
 from api.models.user_model import User
+from api.models.admin_model import Admin
