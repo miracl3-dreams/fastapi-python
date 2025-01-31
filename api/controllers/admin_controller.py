@@ -1,13 +1,24 @@
-from api.utils.app_response import AppResponse
-from api.services.admin_service import AdminService
+# controllers/admin_controller.py
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.ext.asyncio import AsyncSession
+from api.services.admin_service import create_new_admin, authenticate_admin
+from api.schemas.admin_schema import AdminCreate, AdminResponse
+from api.utils.database import AsyncSessionLocal
 
-class AdminController:
-    def __init__(self):
-        self.admin_service = AdminService()  # Corrected the attribute
+router = APIRouter()
 
-    async def create_admin(self, lastname: str, firstname: str, username: str, password: str):
-        message = await self.admin_service.create_admin(lastname, firstname, username, password)
-        return AppResponse.send_success(
-            data={"message": message},
-            message="Admin route executed successfully"
-        )
+# Dependency to get an asynchronous database session
+async def get_db():
+    async with AsyncSessionLocal() as session:
+        yield session
+
+@router.post("/admins/", response_model=AdminResponse)
+async def create_admin(admin: AdminCreate, db: AsyncSession = Depends(get_db)):
+    return await create_new_admin(db, admin)
+
+@router.post("/admins/authenticate/")
+async def login_admin(username: str, password: str, db: AsyncSession = Depends(get_db)):
+    admin = await authenticate_admin(db, username, password)
+    if not admin:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    return {"message": "Login successful"}
