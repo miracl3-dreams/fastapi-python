@@ -2,10 +2,11 @@ fastapi
 uvicorn
 python-dotenv
 sqlalchemy
-aiomysql  # Replace with asyncpg for PostgreSQL
-#asyncpg # For PGSQL
+aiomysql  
 pydantic
 python-jose
 passlib
 alembic
-psycopg2
+pytest
+pytest-asyncio
+mypy
