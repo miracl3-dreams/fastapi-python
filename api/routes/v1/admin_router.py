@@ -1,15 +1,7 @@
-# admin_router.py
+# routes/v1/admin_router.py
 from fastapi import APIRouter
-from api.controllers.admin_controller import AdminController
+from api.controllers.admin_controller import router as admin_router
 
-admin_router = APIRouter()
+router = APIRouter(prefix="/v1")
 
-# Instantiate the AdminController
-admin_controller = AdminController()
-
-# Example routes
-@admin_router.post("/admin/create")
-async def create_admin():
-    return await admin_controller.create_admin()
-
-# You can add more routes related to admin here
+router.include_router(admin_router)
