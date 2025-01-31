@@ -1,11 +1,11 @@
 import os
 from dotenv import load_dotenv
-from string import Template
+
 # Load environment variables from .env file
 load_dotenv()
 
 def resolve_nested_env(value):
-    return Template(value).substitute(os.environ) if value else value
+    return value.format(**os.environ) if value else value
 
 config = {
     "app": {
@@ -13,7 +13,16 @@ config = {
         "env": os.getenv("PROJECT_ENV", "development"),
     },
     "db": {
-        "url": os.getenv("DATABASE_URL")
+        "url": resolve_nested_env(
+            "{scheme}://{user}:{password}@{host}:{port}/{name}".format(
+                scheme="mysql+asyncmy",
+                user=os.getenv("DB_USER", "root"),
+                password=os.getenv("DB_PASSWORD", ""),
+                host=os.getenv("DB_HOST", "localhost"),
+                port=os.getenv("DB_PORT", "3306"),
+                name=os.getenv("DB_NAME", "tm_db")
+            )
+        ),
     },
     "key": {
         "secret": os.getenv("JWT_SECRET_KEY", "default_jwt_secret"),
@@ -27,3 +36,6 @@ config = {
         "forward": f"{os.getenv('PORT_FORWARD_URL', '')}api/v1",
     },
 }
+
+# Debugging: Print the DATABASE_URL
+print("DATABASE_URL:", config["db"]["url"])
