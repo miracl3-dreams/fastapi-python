@@ -1,21 +1,15 @@
-# admin_repository.py
+# repositories/admin_repository.py
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import sessionmaker
-from api.database import get_database_connection
+from sqlalchemy.orm import Session
+from api.models.admin_model import Admin
+from api.schemas.admin_schema import AdminCreate
 
-class AdminRepository:
-    def __init__(self, session: AsyncSession):
-        self.db = session
+async def create_admin(db: AsyncSession, admin: AdminCreate):
+    db_admin = Admin(username=admin.username, password=admin.password)
+    db.add(db_admin)
+    await db.commit()
+    await db.refresh(db_admin)
+    return db_admin
 
-    async def create_admin(self, lastname: str, firstname: str, username: str, password: str) -> str:
-        # Example implementation
-        new_admin = {
-            "lastname": lastname,
-            "firstname": firstname,
-            "username": username,
-            "password": password
-        }
-        # Simulate saving to the database
-        await self.db.execute("INSERT INTO admins (lastname, firstname, username, password) VALUES (:lastname, :firstname, :username, :password)", new_admin)
-        await self.db.commit()
-        return "Admin created successfully"
+async def get_admin_by_username(db: Session, username: str):
+    return db.query(Admin).filter(Admin.username == username).first()
