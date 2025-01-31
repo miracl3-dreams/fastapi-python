@@ -1,19 +1,11 @@
-from pydantic import BaseModel
-from typing import List, Optional
-from uuid import UUID, uuid4
-from api.models.role_model import Role
-from api.models.gender_model import Gender
+# models/user_model.py
+from sqlalchemy import Column, Integer, String, Boolean
+from api.utils.database import Base
 
-class User(BaseModel):
-    id: Optional[UUID] = uuid4()
-    first_name: str
-    last_name: str
-    middle_name: Optional[str] = None
-    gender: Gender
-    roles: List[Role] = []  
-    
-class UserUpdateRequest(BaseModel):
-    first_name: Optional[str]
-    last_name: Optional[str]
-    middle_name: Optional[str]
-    roles: Optional[List[Role]]
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    email = Column(String(100), unique=True, nullable=False)
+    password = Column(String(255), nullable=False)  
+    is_active = Column(Boolean, default=True)  
