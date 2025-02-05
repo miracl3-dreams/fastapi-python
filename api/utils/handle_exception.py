@@ -1,6 +1,6 @@
 from fastapi.responses import JSONResponse
-from utils.app_response import AppResponse
-from utils.custom_error import AuthError, NotFoundError, ValidationError
+from api.utils.app_response import AppResponse
+from api.utils.custom_error import AuthError, NotFoundError, ValidationError
 
 def handle_exception(error: Exception) -> JSONResponse:
     """
