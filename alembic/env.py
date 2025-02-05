@@ -5,7 +5,7 @@ from sqlalchemy import pool
 
 from alembic import context
 import os  # To fetch environment variables
-from config.database import Base
+from api.utils.database import Base
 target_metadata = Base.metadata
 
 # this is the Alembic Config object, which provides
