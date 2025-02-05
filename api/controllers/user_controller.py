@@ -1,24 +1,30 @@
-# controllers/user_controller.py
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from api.services.user_service import create_new_user, authenticate_user
+from api.services.user_service import UserService
 from api.schemas.user_schema import UserCreate, UserResponse
-from api.utils.database import AsyncSessionLocal
+from api.utils.custom_error import AuthError
+from api.utils.handle_exception import handle_exception
 
-router = APIRouter()
+class UserController:
+    def __init__(self):
+        self.user_service = UserService()
 
-# Dependency to get an asynchronous database session
-async def get_db():
-    async with AsyncSessionLocal() as session:
-        yield session
+    async def create_user(self, user_data: UserCreate, db: AsyncSession):
+        try:
+            user = await self.user_service.create_new_user(db, user_data)
+            return user
+        except AuthError as e:
+            raise HTTPException(status_code=401, detail=str(e))
+        except Exception as e:
+            return handle_exception(e)
 
-@router.post("/users/", response_model=UserResponse)
-async def create_user(user: UserCreate, db: AsyncSession = Depends(get_db)):
-    return await create_new_user(db, user)
-
-@router.post("/users/authenticate/")
-async def login_user(email: str, password: str, db: AsyncSession = Depends(get_db)):
-    user = await authenticate_user(db, email, password)
-    if not user:
-        raise HTTPException(status_code=401, detail="Invalid credentials")
-    return {"message": "Login successful"}
+    async def login_user(self, email: str, password: str, db: AsyncSession):
+        try:
+            user = await self.user_service.authenticate_user(db, email, password)
+            if not user:
+                raise AuthError("Invalid credentials")
+            return {"message": "Login successful as User"}
+        except AuthError as e:
+            raise HTTPException(status_code=401, detail=str(e))
+        except Exception as e:
+            return handle_exception(e)
