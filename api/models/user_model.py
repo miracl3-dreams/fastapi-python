@@ -1,4 +1,3 @@
-# models/user_model.py
 from sqlalchemy import Column, Integer, String, Boolean
 from api.utils.database import Base
 
