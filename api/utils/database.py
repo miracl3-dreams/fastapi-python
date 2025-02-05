@@ -62,9 +62,11 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-DATABASE_URL = "mysql+asyncmy://root:@localhost:3306/tm_db"  # Replace with your credentials
+# DATABASE URL MYSQL JUST REPLACE IT.
+DATABASE_URL = "mysql+asyncmy://root:@localhost:3306/tm_db" 
 
-engine = create_async_engine(DATABASE_URL, echo=True)  # Set `echo=True` for debugging SQL queries
+# Set `echo=True` for debugging SQL queries
+engine = create_async_engine(DATABASE_URL, echo=True)  
 
 # Define an asynchronous session
 AsyncSessionLocal = sessionmaker(
