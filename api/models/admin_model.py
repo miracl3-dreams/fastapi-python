@@ -1,4 +1,3 @@
-# models/admin_model.py
 from sqlalchemy import Column, Integer, String
 from api.utils.database import Base
 
