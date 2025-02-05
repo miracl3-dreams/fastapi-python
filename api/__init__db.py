@@ -1,5 +1,5 @@
 import asyncio
-from api.database import engine
+from api.utils.database import engine
 from api.models.admin_model import Base
 
 async def init_db():
