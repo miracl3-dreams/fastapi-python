@@ -1,24 +1,30 @@
-# controllers/admin_controller.py
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from api.services.admin_service import create_new_admin, authenticate_admin
+from api.services.admin_service import AdminService
 from api.schemas.admin_schema import AdminCreate, AdminResponse
-from api.utils.database import AsyncSessionLocal
+from api.utils.custom_error import AuthError
+from api.utils.handle_exception import handle_exception
 
-router = APIRouter()
+class AdminController:
+    def __init__(self):
+        self.admin_service = AdminService()
 
-# Dependency to get an asynchronous database session
-async def get_db():
-    async with AsyncSessionLocal() as session:
-        yield session
+    async def create_admin(self, admin_data: AdminCreate, db: AsyncSession):
+        try:
+            admin = await self.admin_service.create_new_admin(db, admin_data)
+            return admin
+        except AuthError as e:
+            raise HTTPException(status_code=401, detail=str(e))
+        except Exception as e:
+            return handle_exception(e)
 
-@router.post("/admins/", response_model=AdminResponse)
-async def create_admin(admin: AdminCreate, db: AsyncSession = Depends(get_db)):
-    return await create_new_admin(db, admin)
-
-@router.post("/admins/authenticate/")
-async def login_admin(username: str, password: str, db: AsyncSession = Depends(get_db)):
-    admin = await authenticate_admin(db, username, password)
-    if not admin:
-        raise HTTPException(status_code=401, detail="Invalid credentials")
-    return {"message": "Login successful"}
+    async def login_admin(self, username: str, password: str, db: AsyncSession):
+        try:
+            admin = await self.admin_service.authenticate_admin(db, username, password)
+            if not admin:
+                raise AuthError("Invalid credentials")
+            return {"message": "Login successful as Admin"}
+        except AuthError as e:
+            raise HTTPException(status_code=401, detail=str(e))
+        except Exception as e:
+            return handle_exception(e)
