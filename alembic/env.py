@@ -61,15 +61,13 @@ async def run_migrations_online() -> None:
         await connection.run_sync(do_run_migrations)
 
 def do_run_migrations(connection):
-    """Run migrations synchronously within an async context."""
     context.configure(
         connection=connection,
         target_metadata=target_metadata,
-        compare_type=True,  # Optional: Ensures column types are compared during autogenerate
+        compare_type=True,
     )
-
-    with context.begin_transaction():
-        context.run_migrations()
+    # Run migrations without starting an extra transaction block
+    context.run_migrations()
 
 if context.is_offline_mode():
     run_migrations_offline()

@@ -7,6 +7,6 @@ Base = declarative_base()
 # This ensures Alembic autogenerate works across all models
 
 
-from api.models.test_model import Test
 from api.models.user_model import User
 from api.models.admin_model import Admin
+from api.models.task_model import Task
