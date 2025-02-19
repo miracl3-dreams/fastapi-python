@@ -8,7 +8,6 @@ from fastapi import HTTPException
 
 class TaskRepository:
     async def create_task(self, db: AsyncSession, task_data: TaskCreate):
-        # Check if task name already exists
         query = select(Task).filter(Task.task_name == task_data.task_name)
         result = await db.execute(query)
         if result.scalars().first():
