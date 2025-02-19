@@ -9,7 +9,7 @@ class TaskController:
     def __init__(self):
         self.task_service = TaskService()
 
-    async def create_task(self, task_data: TaskCreate, db: AsyncSession):
+    async def create_task(self, task_data: TaskCreate, db: AsyncSession) -> TaskResponse:
         """Create a new task."""
         try:
             task = await self.task_service.create_task(task_data, db)
@@ -19,7 +19,7 @@ class TaskController:
         except Exception as e:
             return handle_exception(e)
 
-    async def get_task(self, task_id: int, db: AsyncSession):
+    async def get_task(self, task_id: int, db: AsyncSession) -> TaskResponse:
         """Retrieve a task by its ID."""
         try:
             task = await self.task_service.get_task_by_id(task_id, db)
