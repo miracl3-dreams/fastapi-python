@@ -1,7 +1,7 @@
 class CustomError(Exception):
     def __init__(self, message: str, status_code: int = 500):
         super().__init__(message)
-        self.name = self.__class__.__name__  # Equivalent to `this.constructor.name`
+        self.name = self.__class__.__name__  
         self.message = message
         self.status_code = status_code
 
@@ -17,7 +17,6 @@ class ValidationError(CustomError):
 class AuthError(CustomError):
     def __init__(self, message: str = "Invalid Credentials"):
         super().__init__(message, 401)
-
 
 class NotFoundError(CustomError):
     def __init__(self, message: str = "Resource not found"):
