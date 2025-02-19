@@ -1,12 +1,12 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, Field, EmailStr
 
-class AdminCreate(BaseModel):
-    username: str
-    password: str
+class AdminCreate(BaseModel): 
+    email: EmailStr = Field(..., min_length=3, max_length=50, example="test123@gmail.com")
+    password: str = Field(..., min_length=8, max_length=50, example="test1234")
 
 class AdminResponse(BaseModel):
-    id: int
-    username: str
+    id: int 
+    email: EmailStr = Field(..., min_length=3, max_length=50)
 
     class Config:
-        model_config = ConfigDict(from_attributes=True)
+        from_attributes = True
