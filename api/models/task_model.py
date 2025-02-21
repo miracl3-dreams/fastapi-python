@@ -8,3 +8,7 @@ class Task(Base):
     task_name = Column(String(255), unique=True, nullable=False)
     task_description = Column(Text, nullable=True)  
     status = Column(Boolean, nullable=False, default=False) 
+    
+    def status_label(self):
+        """Returns 'incomplete' if False, 'complete' if True."""
+        return "complete" if self.status else "incomplete"
