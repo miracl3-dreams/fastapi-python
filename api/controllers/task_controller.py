@@ -56,3 +56,13 @@ class TaskController:
             return {"message": "Task successfully deleted"}
         except Exception as e:
             return handle_exception(e)
+        
+    async def search_tasks(self, query: str, db: AsyncSession) -> list[TaskResponse]:
+        """Search tasks by name or description."""
+        try:
+            tasks = await self.task_service.search_tasks(query, db)  
+            if not tasks:
+                raise HTTPException(status_code=404, detail="No tasks found matching the query")
+            return tasks
+        except Exception as e:
+            return handle_exception(e)
