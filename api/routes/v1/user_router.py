@@ -7,7 +7,6 @@ from api.utils.database import AsyncSessionLocal
 router = APIRouter()
 user_controller = UserController()
 
-# Dependency to get the database session
 async def get_db():
     async with AsyncSessionLocal() as session:
         yield session
