@@ -3,7 +3,6 @@ from sqlalchemy.future import select
 from api.models.task_model import Task
 from api.schemas.task_schema import TaskCreate, TaskResponse
 from api.utils.custom_error import NotFoundError
-from sqlalchemy.orm import selectinload
 from fastapi import HTTPException
 
 class TaskRepository:
@@ -51,3 +50,16 @@ class TaskRepository:
         await db.delete(task)
         await db.commit()
         return True
+    
+    async def search_tasks(self, db: AsyncSession, query: str) -> list[TaskResponse]:
+        """Search tasks by task name or description."""
+        stmt = select(Task).filter(
+            (Task.task_name.ilike(f"%{query}%")) | (Task.task_description.ilike(f"%{query}%"))
+        )
+        result = await db.execute(stmt)
+        tasks = result.scalars().all()
+        
+        if not tasks:
+            raise NotFoundError("No tasks found matching the search query.")
+        
+        return [TaskResponse.model_validate(task) for task in tasks]
