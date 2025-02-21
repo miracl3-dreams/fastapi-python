@@ -31,3 +31,8 @@ async def update_task(task_id: int, task: TaskUpdate, db: AsyncSession = Depends
 @router.delete("/delete/{task_id}", response_model=TaskDelete)
 async def delete_task(task_id: int, db: AsyncSession = Depends(get_db)):
     return await task_controller.delete_task(task_id, db)
+
+@router.get("/search", response_model=List[TaskResponse])
+async def search_tasks(query: str, db: AsyncSession = Depends(get_db)):
+    """Search tasks by name or description."""
+    return await task_controller.search_tasks(query, db)
