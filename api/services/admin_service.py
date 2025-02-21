@@ -1,4 +1,3 @@
-from fastapi import HTTPException
 from api.repositories.admin_repository import AdminRepository
 from api.schemas.admin_schema import AdminCreate, AdminResponse
 from api.utils.password import PasswordManager 
@@ -15,7 +14,7 @@ class AdminService:
         hashed_password = PasswordManager.hash_password(admin_data.password)  
         admin_data.password = hashed_password
         
-        """Create admin."""
+        """Create admin"""
         try:
             admin = await self.admin_repository.create_admin(db, admin_data)
         except EmailAlreadyExistsException:
