@@ -6,7 +6,7 @@ class UserCreate(BaseModel):
 
 class UserResponse(BaseModel):
     id: int 
-    email: EmailStr = Field(..., min_length=3, max_length=50)
+    email: EmailStr = Field(..., min_length=3, max_length=50, example="test123@gmail.com")
 
     class Config:
         from_attributes = True
