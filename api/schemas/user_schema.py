@@ -1,12 +1,20 @@
-from pydantic import BaseModel, Field, EmailStr
+from pydantic import BaseModel
+from datetime import datetime
 
-class UserCreate(BaseModel): 
-    email: EmailStr = Field(..., min_length=3, max_length=50, example="test123@gmail.com")
-    password: str = Field(..., min_length=8, max_length=50, example="test1234")
+class UserCreate(BaseModel):
+    uid: str
+    first_name: str
+    last_name: str
+    gender: str
 
 class UserResponse(BaseModel):
-    id: int 
-    email: EmailStr = Field(..., min_length=3, max_length=50, example="test123@gmail.com")
+    id: int
+    uid: str
+    first_name: str
+    last_name: str
+    gender: str
+    registered_at: datetime
+    is_active: bool
 
     class Config:
         from_attributes = True

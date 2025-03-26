@@ -1,10 +1,17 @@
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String, DateTime, Boolean
+from sqlalchemy.orm import relationship
 from api.utils.database import Base
+from datetime import datetime
 
 class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    email = Column(String(100), unique=True, nullable=False)
-    password = Column(String(255), nullable=False)  
-    is_active = Column(Boolean, default=True)  
+    uid = Column(String(255), unique=True, nullable=False)  
+    first_name = Column(String(100), nullable=False)
+    last_name = Column(String(100), nullable=False)
+    gender = Column(String(10), nullable=False)
+    registered_at = Column(DateTime, default=lambda: datetime.now(datetime.timezone.utc))
+    is_active = Column(Boolean, default=True)
+    
+    attendance_records = relationship("Attendance", back_populates="user")

@@ -1,14 +1,15 @@
 from pydantic import BaseModel, field_serializer
+from typing import Optional
 
 class TaskCreate(BaseModel):
     task_name: str
-    task_description: str
-    status: bool
+    task_description: Optional[str] = None  # ✅ Optional
+    status: bool = False  # ✅ Default to False
 
 class TaskUpdate(BaseModel):
     task_name: str
-    task_description: str
-    status: bool
+    task_description: Optional[str] = None  # ✅ Optional
+    status: bool = False  # ✅ Default to False
 
 class TaskDelete(BaseModel):
     id: int
@@ -16,7 +17,7 @@ class TaskDelete(BaseModel):
 class TaskResponse(BaseModel):
     id: int 
     task_name: str
-    task_description: str
+    task_description: Optional[str] = None  # ✅ Optional
     status: bool
     
     @field_serializer("status")

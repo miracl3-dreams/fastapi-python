@@ -2,13 +2,13 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from api.controllers.user_controller import UserController
 from api.schemas.user_schema import UserCreate
-from api.utils.database import AsyncSessionLocal
+from api.utils.database import get_db
 
 router = APIRouter()
 user_controller = UserController()
 
 async def get_db():
-    async with AsyncSessionLocal() as session:
+    async with get_db() as session:
         yield session
 
 @router.post("/create", response_model=UserCreate)
