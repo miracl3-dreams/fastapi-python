@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from .test_router import router as test_router
+from ...tests.test_router import router as test_router
 from .admin_router import router as admin_router
 from .user_router import router as user_router
 from .task_router import router as task_router

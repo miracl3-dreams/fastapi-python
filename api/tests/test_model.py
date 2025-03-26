@@ -3,7 +3,7 @@ from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
 
-from . import Base
+from ..models import Base
 
 class Test(Base):
     __tablename__ = 'test'

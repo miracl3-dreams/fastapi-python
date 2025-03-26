@@ -1,4 +1,4 @@
-from api.repositories.test_repository import TestRepository
+from api.tests.test_repository import TestRepository
 
 class TestService:
     """
