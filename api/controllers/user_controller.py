@@ -9,6 +9,7 @@ class UserController:
         self.user_service = UserService()  
 
     async def register_user(self, user_data: UserCreate, db: AsyncSession):
+        """Create a user using RFID."""
         user = await self.user_service.register_user(db, user_data)
         if not user:
             raise HTTPException(status_code=400, detail="RFID UID is already registered.")

@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from api.controllers.test_controller import TestController
+from api.tests.test_controller import TestController
 
 router = APIRouter()
 

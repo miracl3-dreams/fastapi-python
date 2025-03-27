@@ -8,5 +8,3 @@ Base = declarative_base()
 
 
 from api.models.user_model import User
-from api.models.admin_model import Admin
-from api.models.task_model import Task
