@@ -6,6 +6,9 @@ from api.utils.custom_error import AuthError
 from api.utils.handle_exception import handle_exception
 
 class TaskController:
+    """
+    Controller for handling task to create, get, update, delete, search.
+    """
     def __init__(self):
         self.task_service = TaskService()
 
