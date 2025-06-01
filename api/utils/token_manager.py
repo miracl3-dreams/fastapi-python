@@ -21,14 +21,14 @@ class TokenManager:
             str: The generated JWT access token.
         """
         secret = config["key"]["secret"]
-        expires_in = 20  # Token expiration in seconds
+        expires_in = 900  # 15 minutes
         expiration = datetime.utcnow() + timedelta(seconds=expires_in)
 
         # Add expiration time to payload
         if isinstance(payload, dict):
             payload["exp"] = expiration
         else:
-            payload = {"exp": expiration, "data": payload}
+            payload = {"exp": expiration, "id": payload}
 
         return jwt.encode(payload, secret, algorithm="HS256")
 
@@ -51,7 +51,7 @@ class TokenManager:
         if isinstance(payload, dict):
             payload["exp"] = expiration
         else:
-            payload = {"exp": expiration, "data": payload}
+            payload = {"exp": expiration, "id": payload}
 
         return jwt.encode(payload, secret, algorithm="HS256")
 
