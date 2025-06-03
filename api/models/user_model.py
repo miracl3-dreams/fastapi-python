@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, DateTime, Boolean
 from datetime import datetime, timezone
-from sqlalchemy.sql import func 
+from sqlalchemy.sql import func
+from sqlalchemy.orm import relationship
 from ..models import Base
 
 class User(Base):
@@ -17,3 +18,4 @@ class User(Base):
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
     deleted_at = Column(DateTime(timezone=True), nullable=True)
 
+    tasks = relationship("Task", back_populates="user", cascade="all, delete-orphan")
