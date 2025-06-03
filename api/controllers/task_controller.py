@@ -1,9 +1,7 @@
-from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from api.utils.app_response import AppResponse
 from api.services.task_service import TaskService
 from api.schemas.task_schema import TaskCreate
-from api.utils.custom_error import AuthError
 from api.utils.handle_exception import handle_exception
 
 class TaskController:
@@ -18,9 +16,7 @@ class TaskController:
         """Create a new task for the authenticated user."""
         try:
             task = await self.task_service.create_task(task_data, db, user["id"])
-            return AppResponse.success(data=task, message="Task created successfully")
-        except AuthError as e:
-            raise HTTPException(status_code=401, detail=str(e))
+            return AppResponse.send_success(data=task.model_dump(), message="Task created successfully")
         except Exception as e:
             return handle_exception(e)
 
@@ -28,9 +24,7 @@ class TaskController:
         """Retrieve a task by its ID, ensuring it belongs to the user."""
         try:
             task = await self.task_service.get_task_by_id(task_id, db, user["id"])
-            if not task:
-                raise HTTPException(status_code=404, detail="Task not found")
-            return AppResponse.success(data=task, message="Task retrieved successfully")
+            return AppResponse.send_success(data=task.model_dump(), message="Task retrieved successfully")
         except Exception as e:
             return handle_exception(e)
 
@@ -38,7 +32,7 @@ class TaskController:
         """Retrieve all tasks for the authenticated user."""
         try:
             tasks = await self.task_service.get_all_tasks(db, user["id"])
-            return AppResponse.success(data=tasks, message="All Tasks retrieved successfully")
+            return AppResponse.send_success(data=[t.model_dump() for t in tasks], message="All Tasks retrieved successfully")
         except Exception as e:
             return handle_exception(e)
 
@@ -46,19 +40,15 @@ class TaskController:
         """Update a task only if it belongs to the authenticated user."""
         try:
             task = await self.task_service.update_task(task_id, task_data, db, user["id"])
-            if not task:
-                raise HTTPException(status_code=404, detail="Task not found")
-            return AppResponse.success(data=task, message="Task updated successfully")
+            return AppResponse.send_success(data=task.model_dump(), message="Task updated successfully")
         except Exception as e:
             return handle_exception(e)
 
     async def delete_task(self, task_id: int, db: AsyncSession, user: dict):
         """Delete a task only if it belongs to the authenticated user."""
         try:
-            is_deleted = await self.task_service.delete_task(task_id, db, user["id"])
-            if not is_deleted:
-                raise HTTPException(status_code=404, detail="Task not found")
-            return AppResponse.success(message="Task successfully deleted")
+            await self.task_service.delete_task(task_id, db, user["id"])
+            return AppResponse.send_success(message="Task successfully deleted")
         except Exception as e:
             return handle_exception(e)
 
@@ -66,8 +56,6 @@ class TaskController:
         """Search tasks by name or description within the user's tasks."""
         try:
             tasks = await self.task_service.search_tasks(query, db, user["id"])
-            if not tasks:
-                raise HTTPException(status_code=404, detail="No tasks found matching the query")
-            return AppResponse.success(data=tasks, message="Tasks found successfully")
+            return AppResponse.send_success(data=[t.model_dump() for t in tasks], message="Tasks found successfully")
         except Exception as e:
             return handle_exception(e)
