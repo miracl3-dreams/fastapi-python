@@ -2,6 +2,7 @@ from jose import jwt, JWTError
 from datetime import datetime, timedelta
 from typing import Union, Dict, Any
 from api.config.config import config
+from copy import deepcopy
 
 
 class TokenManager:
@@ -24,13 +25,10 @@ class TokenManager:
         expires_in = 900  # 15 minutes
         expiration = datetime.utcnow() + timedelta(seconds=expires_in)
 
-        # Add expiration time to payload
-        if isinstance(payload, dict):
-            payload["exp"] = expiration
-        else:
-            payload = {"exp": expiration, "id": payload}
+        payload_copy = deepcopy(payload)
+        payload_copy["exp"] = expiration
 
-        return jwt.encode(payload, secret, algorithm="HS256")
+        return jwt.encode(payload_copy, secret, algorithm="HS256")
 
     @staticmethod
     def generate_refresh_token(payload: Union[str, Dict[str, Any]]) -> str:
