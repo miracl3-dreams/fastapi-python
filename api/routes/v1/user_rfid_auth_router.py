@@ -11,7 +11,7 @@ user_controller = UserController()
 async def register_rfid(user_data: UserCreate, db: AsyncSession = Depends(get_db)):
     """Register RFID of User"""
     return await user_controller.register_user(user_data, db)
-
+    
 @router.post("/login")
 async def login_rfid(rfid_uid: str, db: AsyncSession = Depends(get_db)):
     """Authenticate user via RFID and return tokens"""
