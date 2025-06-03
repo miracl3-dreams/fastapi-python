@@ -45,19 +45,22 @@ api/
 6. **`services/`**  
    Encapsulates business logic, processes, validates, and orchestrates workflows between repositories and controllers. Services ensure a clean separation of concerns between data handling and request handling.
 
-7. **`controllers/`**  
+7. **`schemas/`**  
+   Defines the shape and validation rules for request and response data using Pydantic models. Schemas ensure that the data exchanged between the frontend and backend adheres to expected formats and types, acting as a contract between APIs and consumers.  
+
+8. **`controllers/`**  
    Bridges HTTP-specific logic with services. Controllers process incoming requests, delegate tasks to the appropriate service, and format responses for the client.
 
-8. **`routes/`**  
+9. **`routes/`**  
    Defines API endpoints and organizes them into logical groups. Versioning (e.g., `/api/v1`) is implemented to ensure backward compatibility and maintain clean and maintainable routing.
 
-9. **`utils/`**  
+10. **`utils/`**  
    Contains shared helper functions and utility classes such as token management, password hashing, and response formatting. These utilities reduce code duplication and ensure consistency across the application.
 
-10. **`middleware/`**  
+11. **`middleware/`**  
     Processes global requests and responses, handling cross-cutting concerns such as authentication, logging, and request transformations. Middleware ensures consistent behavior across all routes.
 
-11. **`__init__.py`**  
+12. **`__init__.py`**  
     Organizes Python packages by marking directories as modules. It simplifies imports by exposing only specific components of a module and modularizes the application structure.
 
 ---
