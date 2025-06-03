@@ -16,6 +16,7 @@ api/
 ├── alembic/                        # Database schema migrations
 ├── models/                         # Database table definitions
 ├── repositories/                   # Handles database interactions
+├── schemas/                        # Defines data validation and serialization using Pydantic models
 ├── services/                       # Encapsulates business logic
 ├── controllers/                    # Bridges HTTP requests with services
 ├── routes/                         # Defines API endpoints and organizes versioning
